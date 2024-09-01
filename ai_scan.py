@@ -3,8 +3,8 @@
 __author__ = "Omar Santos"
 __version__ = "0.1.0"
 __license__ = "BSD 3-Clause"
-__description__ = "AI-powered SSL/TLS analysis of hosts"
-__usage__ = "python3 ai_scan.py results.md"
+__description__ = "AI-powered SSL/TLS analysis of hosts in the results.md file"
+__usage__ = "python3 ai_scan.py"
 
 # Import the necessary libraries
 import re
