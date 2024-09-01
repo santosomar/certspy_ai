@@ -3,3 +3,4 @@ certspy
 langchain_openai
 langchain
 ipwhois
+python-nmap
