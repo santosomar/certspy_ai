@@ -1,0 +1,5 @@
+python-dotenv
+certspy
+langchain_openai
+langchain
+ipwhois
