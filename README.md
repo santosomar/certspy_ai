@@ -37,11 +37,16 @@ The `ai_recon.py` script is a powerful tool for performing OSINT (Open Source In
 
 ### Usage
 
-To use the script, run it from the command line with a domain name as an argument:
+To use the `ai_recon.py` script, run it from the command line with a domain name as an argument:
 
 ```bash
 python ai_recon.py secretcorp.org
 ```
+You can also use the `ai_recon_md.py` script to generate a markdown file with the results:
+```bash
+python ai_recon_md.py secretcorp.org -o results.md
+```
+The output will be saved to the `results.md` file. I have also included an example of the [results.md](results.md) file.
 
 ## License
 Read the [LICENSE file](LICENSE).
