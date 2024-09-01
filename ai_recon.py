@@ -33,6 +33,7 @@ def create_prompt_template(domain):
 
     Returns:
         ChatPromptTemplate: A prompt template for the given domain.
+    """
     template = f"""You are an expert security researcher and OSINT investigator specializing in analyzing domain information for {domain}.
     Given the following information about SSL/TLS certificates associated with {domain}, provide an analysis:
 
@@ -58,12 +59,17 @@ def get_certificate_info(domain):
 
     Returns:
         str: A string containing the certificate information.
-    api = certspy.certspy()
-    results = api.search(domain)
-    if results:
-        formatted_results = api.format_results(results, common_name_only=True)
-        return formatted_results
-    return None
+    """
+    try:
+        api = certspy.certspy()
+        results = api.search(domain)
+        if results:
+            formatted_results = api.format_results(results, common_name_only=True)
+            return formatted_results
+        return None
+    except Exception as e:
+        print(f"Error retrieving certificate info: {e}")
+        return None
 
 def resolve_dns(hostname):
     """
@@ -74,6 +80,7 @@ def resolve_dns(hostname):
 
     Returns:
         str: The IP address for the given hostname.
+    """
     try:
         return socket.gethostbyname(hostname)
     except socket.gaierror:
@@ -88,6 +95,7 @@ def get_whois_info(ip):
 
     Returns:
         tuple: A tuple containing the organization and CIDR information.
+    """
     try:
         obj = IPWhois(ip)
         results = obj.lookup_rdap(depth=1)
@@ -146,6 +154,9 @@ def parse_arguments():
     return parser.parse_args()
 
 def main():
+    """
+    Main function to execute the AI-powered OSINT Analysis tool.
+    """
     args = parse_arguments()
     domain = args.domain
     print(f"-----OSINT Analysis of Domain {domain}-----")
@@ -155,8 +166,28 @@ def main():
     cert_info = get_certificate_info(domain)
 
     if cert_info:
-        additional_info = analyze_hostnames(cert_info)
-        full_info = "\n".join(cert_info) + "\n\nAdditional Information:\n" + additional_info
+        print("\n----- Raw Certificate Information -----")
+        print("Hostnames:")
+        for hostname in cert_info:
+            print(f"  {hostname}")
+
+        print("\n----- DNS Resolution and WHOIS Information -----")
+        additional_info = []
+        for hostname in cert_info:
+            print(f"\nHostname: {hostname}")
+            ip = resolve_dns(hostname)
+            if ip:
+                print(f"IP: {ip}")
+                org, cidr = get_whois_info(ip)
+                print(f"Organization: {org}")
+                print(f"CIDR: {cidr}")
+                additional_info.append(f"Hostname: {hostname}\nIP: {ip}\nOrganization: {org}\nCIDR: {cidr}\n")
+            else:
+                print("DNS resolution failed")
+
+        full_info = "\n".join(cert_info) + "\n\nAdditional Information:\n" + "\n".join(additional_info)
+        
+        print("\n----- AI Analysis -----")
         result = analyze_domain(model, prompt_template, domain, full_info)
         print(result.content)
     else:
