@@ -61,3 +61,21 @@ This will start the process of gathering certificate information, resolving host
 pip3 install -r requirements.txt
 ```
 
+## AI Scan Script (ai_scan.py)
+
+The `ai_scan.py` script is a proof-of-concept tool for performing AI-powered SSL/TLS analysis on a given host or IP address. It combines Nmap SSL cipher scan results and AI-powered analysis to provide comprehensive insights about the host's SSL/TLS configuration.
+
+### How It Works
+
+1. The script reads the results.md file that was created by ai_recon_md.py and extracts the hostnames from the file. 
+2. It performs an Nmap SSL cipher scan on the specified host or IP address.
+3. The scan results are then sent to an AI model for analysis.
+4. The AI-generated insights are displayed as the final output.
+
+### Usage
+
+To use the `ai_scan.py` script, run it from the command line with a host or IP address as an argument:
+
+```bash
+python3 ai_scan.py
+```
